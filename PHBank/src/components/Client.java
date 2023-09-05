@@ -7,6 +7,6 @@ public class Client {
 	
 	private String first_name;
 	
-	private int client_number;
+	private int client_number = 0;
 
 }
