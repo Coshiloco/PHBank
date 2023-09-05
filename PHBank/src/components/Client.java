@@ -9,4 +9,6 @@ public class Client {
 	
 	private int client_number = 0;
 
+	
+	
 }
