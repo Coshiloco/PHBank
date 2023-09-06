@@ -49,13 +49,18 @@ public abstract class Account {
     }
     
     public void updateBalance(Flow flow) {
-        if (this.accountNumber == flow.getTargetAccountNumber()) {
-            if (flow instanceof Debit || flow instanceof Transfert) {
-                this.balance -= flow.getAmount();
-            } else if (flow instanceof Credit) {
-                this.balance += flow.getAmount();
+        if (flow instanceof Credit) {
+            this.balance += flow.getAmount();
+        } else if (flow instanceof Debit) {
+            this.balance -= flow.getAmount();
+        } else if (flow instanceof Transfert) {
+            Transfert transfer = (Transfert) flow;
+            if (this.accountNumber == transfer.getTargetAccountNumber()) {
+                this.balance += transfer.getAmount();
+            } else if (this.accountNumber == transfer.getSourceAccountNumber()) {
+                this.balance -= transfer.getAmount();
             }
         }
     }
-
+    
 }
