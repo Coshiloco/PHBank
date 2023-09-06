@@ -1,4 +1,4 @@
-package test;  // Paquete diferente al de la clase Client
+package test; 
 
 import components.Account;
 import components.Client;
@@ -6,24 +6,21 @@ import components.CurrentAccount;
 import components.SavingsAccount;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ClientTest {
 
     public static void main(String[] args) {
-        List<Client> clients = loadClients(3);  // Cargamos 3 clientes para la prueba
+        List<Client> clients = loadClients(3);
         displayClients(clients);
         
-        List<Account> accounts = loadAccounts(clients);
-        displayAccounts(accounts);
+        List<Account> accountList = loadAccounts(clients);
+        Hashtable<Integer, Account> accountTable = convertToHashtable(accountList);
+        displayAccountsTable(accountTable);
     }
 
-    /**
-     * Método para cargar una lista de clientes.
-     * @param numOfClients número de clientes que se quieren generar.
-     * @return una lista con el número especificado de clientes.
-     */
     public static List<Client> loadClients(int numOfClients) {
         List<Client> clients = new ArrayList<>();
         for (int i = 1; i <= numOfClients; i++) {
@@ -31,13 +28,7 @@ public class ClientTest {
         }
         return clients;
     }
-    
-    /**
-     * Metodo para cargar cuentas basadas en una lista de clientes
-     * Crea una cuenta de ahorros y una cuenta corriente para cada cliente
-     * @param clientes lista de clientes
-     * @return una lista de cuentas
-     */
+
     public static List<Account> loadAccounts(List<Client> clients) {
     	List<Account> accounts = new ArrayList<Account>();
     	for (Client client : clients) {
@@ -46,11 +37,15 @@ public class ClientTest {
 		}
     	return accounts;
     }
+    
+    public static Hashtable<Integer, Account> convertToHashtable(List<Account> accounts) {
+        Hashtable<Integer, Account> table = new Hashtable<>();
+        for (Account account : accounts) {
+            table.put(account.getAccountNumber(), account);
+        }
+        return table;
+    }
 
-    /**
-     * Método para mostrar la lista de clientes.
-     * @param clients lista de clientes que se quieren mostrar.
-     */
     public static void displayClients(List<Client> clients) {
         String clientStrings = clients.stream()
                                       .map(Client::toString)
@@ -58,15 +53,12 @@ public class ClientTest {
         System.out.println(clientStrings);
     }
     
-    /**
-     * Metodo para mostrar la lista de cuentas
-     * @param accounts lista de cuentas que se quieran mostrar 
-     */
-    public static void displayAccounts(List<Account> accounts) {
-    	String accountStrings = accounts.stream()
-    			.map(Account::toString)
-    			.collect(Collectors.joining("\n"));
-    	System.out.println(accountStrings);
+    public static void displayAccountsTable(Hashtable<Integer, Account> accountsTable) {
+        String accountStrings = accountsTable.values().stream()
+            .sorted((a1, a2) -> Double.compare(a1.getBalance(), a2.getBalance()))
+            .map(Account::toString)
+            .collect(Collectors.joining("\n"));
+        System.out.println(accountStrings);
     }
 }
 

@@ -1,24 +1,20 @@
 package components;
 
 public abstract class Account {
-    // 1.2.1 Creation of the account class
 
-    // Attributes
-    protected static int nextAccountNumber = 1;  // Variable estática para incrementar automáticamente el número de cuenta
+    protected static int nextAccountNumber = 1; 
     protected String label;
     protected double balance;
     protected int accountNumber;
     protected Client client;
 
-    // Constructor
     public Account(String label, Client client) {
         this.label = label;
         this.client = client;
-        this.balance = 0;  // El saldo inicial por defecto es 0
-        this.accountNumber = nextAccountNumber++;  // Asigna y luego incrementa el número de cuenta
+        this.balance = 0;  
+        this.accountNumber = nextAccountNumber++; 
     }
 
-    // Accessors and Mutators
     public String getLabel() {
         return label;
     }
@@ -31,16 +27,14 @@ public abstract class Account {
         return balance;
     }
 
-    // Este setter se actualizará más tarde según las instrucciones
     public void setBalance(double amount) {
-        this.balance += amount;  // Por ahora, solo agregamos el monto al saldo
+        this.balance += amount;  
     }
 
     public int getAccountNumber() {
         return accountNumber;
     }
 
-    // No se proporciona un set para accountNumber porque se asigna automáticamente
     public Client getClient() {
         return client;
     }
@@ -53,4 +47,15 @@ public abstract class Account {
     public String toString() {
         return "Account [Label=" + label + ", Balance=" + balance + ", Account Number=" + accountNumber + ", Client=" + client.toString() + "]";
     }
+    
+    public void updateBalance(Flow flow) {
+        if (this.accountNumber == flow.getTargetAccountNumber()) {
+            if (flow instanceof Debit || flow instanceof Transfert) {
+                this.balance -= flow.getAmount();
+            } else if (flow instanceof Credit) {
+                this.balance += flow.getAmount();
+            }
+        }
+    }
+
 }
